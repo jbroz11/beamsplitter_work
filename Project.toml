@@ -1,0 +1,12 @@
+name = "beamsplitter_work"
+uuid = "d25bc7dd-97b7-478b-be03-876496d79e33"
+authors = ["Joseph Broz <brozj11@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+NLsolve = "2774e3e8-f4cf-5e23-947b-6d7e65073b56"
+PyPlot = "d330b81b-6aea-500a-939a-2ce795aea3ee"
+QuantumOpticsBase = "4f57444f-1401-5e15-980d-4471b28d5678"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+RandomMatrices = "2576dda1-a324-5b11-aa66-c48ed7e3c618"

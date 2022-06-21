@@ -1,5 +1,6 @@
 """
     commonelements(A, B)
+
 Given two arrays `A` and `B` returns `true` if they have at least one element in common (false, otherwise).
 """
 function commonelements(A, B)
@@ -11,6 +12,7 @@ end
 
 """
     W(x...)
+
 `x` is a vector of phases. Returns a generalized W-state of dimension length(x) with phases as given by elements of `x`\n
 eg. x = 1, 1, -1 returns (|001⟩ + |010⟩ - |100⟩)/√3
 """
@@ -22,6 +24,7 @@ end
 
 """
     M(x...)
+
 Same as `W(x...)` but with 1 ⟷ 0
 """
 function M(x...) 
@@ -32,12 +35,14 @@ end
 
 """
     GHZ(x; N=2)
+
 Returns (|00...0⟩ + x|11...1⟩)/√2 with dimension `N`.
 """
 GHZ(x; N=2) = [(1/√2, [0 for _ in 1:N]), ((-1)^((x%2)+1)/√2, [1 for _ in 1:N])]
 
 """
     K(x)
+
 Returns the 6 permutations of the product state |0011⟩.
 """
 K(x) = [(1, lpermutations([0, 0, 1, 1])[x])]
@@ -58,6 +63,7 @@ end
 
 """
     singlephotonclicks(U::Array{Complex}, input_state)
+
 We assume the input state corresponds to exactly one photon incident at each input port, which can either be
 horizontally (0) or vertically (1) polarized, though this input state will generally be a superposition.
 
@@ -103,6 +109,10 @@ function singlephotonclicks(U, input_state)
     output_operator = expand(output_operator)
     permutations = lpermutations(vcat([0 for _ in 1:N], [1 for _ in 1:N]))
     coincidence_counts = []
+    #=
+    This can be done much more efficiently, the number of coefficients scales as N^N presently
+    but we only really care about the single photon clicks 
+    =#
     for permutation in permutations
         operator = 1
         for i in 1:N
@@ -114,7 +124,10 @@ function singlephotonclicks(U, input_state)
             end
         end
         if haskey(output_operator.dict, operator)
-             push!(coincidence_counts, [statetostring(permutation), abs(output_operator.dict[operator])^2, permutation])
+            prob = abs(output_operator.dict[operator])^2
+            if prob > 1e-8
+                push!(coincidence_counts, [statetostring(permutation), prob, permutation])
+            end
         end
     end
     return coincidence_counts
@@ -122,6 +135,7 @@ end
 
 """
     actual_output_state(U, input_state)
+
 Computes the full quantum output state after the beam splitter network described by `U`. `input_state` should be
 in the same form as in `singlephotonclicks`.
 """
@@ -157,11 +171,12 @@ end
 
 """
     clicksfromfullstate(state)
+
 Returns the same thing as `singlephotonclicks` but takes as input the full quantum state.
 """
 function clicksfromfullstate(state)
     N = length(state.basis.bases) ÷ 2
-    println(N)
+    b = FockBasis(N)
     results = []
     permutations = lpermutations(vcat([0 for _ in 1:N], [1 for _ in 1:N]))
     for permutation in permutations

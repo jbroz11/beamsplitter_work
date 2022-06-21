@@ -2,6 +2,7 @@
 # lexicographic premutations generation, By Donald Knuth
 """
     lpermutations(a::Vector)
+
 Returns all unique permutations of `a`.
 """ 
 function lpermutations(a)
@@ -55,6 +56,7 @@ end
 # https://stackoverflow.com/questions/37101324/how-to-zero-out-small-values-in-an-array#answer-37101609
 """
     sparsify(x::Array, eps::Real)
+
 Sets `x[i, j] < eps = 0` for all `i,j`. If `eps` is unspecified, defaults to `eps=1e-8`.
 """
 function sparsify(x, eps) 
@@ -157,6 +159,7 @@ end
 
 """
     swap(N, m, n)
+
 Returns NxN unitary description of operation that swaps input m with n on outputs.
 """
 function swap(N, m, n)
@@ -165,3 +168,10 @@ function swap(N, m, n)
     U[n, m] = 1.
     return U
 end
+
+""""
+    symmetricunitary(N::Int)
+
+Returns symmetric unitary `U` with U_{ik} = exp(i2π/N * (i - 1) * (k - 1)) / √N
+"""
+symmetricunitary(N::Int) = sparsify.([exp(2π * im * (m - 1) * (k - 1) / N)/√N for m in 1:N,  k in 1:N])

@@ -80,7 +80,7 @@ end
 ##################################################################################################################################
 
 # F[1] (F[2]) are the real (imaginary) expressions for [Tₘₙ(θ,ϕ)×U]ₖₗ
-function f!(F, x, k::Int, l::Int, u1::Complex, u2::Complex)
+function f!(F, x, k::Int, l::Int, u1, u2)
     θ = x[1]
     ϕ = x[2]
     F[1] = real(u1) * cos(ϕ) * sin(θ) - imag(u1) * sin(ϕ) * sin(θ) + real(u2) * cos(θ)
@@ -88,7 +88,7 @@ function f!(F, x, k::Int, l::Int, u1::Complex, u2::Complex)
 end
 
 # The Jacobian for the system of equations described by F[1], F[2] in f! as a function of θ, ϕ
-function j!(J, x, k::Int, l::Int, u1::Complex, u2::Complex)
+function j!(J, x, k::Int, l::Int, u1, u2)
     θ = x[1]
     ϕ = x[2]
     J[1, 1] =  real(u1) * cos(ϕ) * cos(θ) - imag(u1) * sin(ϕ) * cos(θ) - real(u2) * sin(θ)
@@ -98,7 +98,7 @@ function j!(J, x, k::Int, l::Int, u1::Complex, u2::Complex)
 end
 
 # F[1] (F[2]) are the real (imaginary) expressions for [U×Tₘₙ⁻¹(θ,ϕ)]ₖₗ
-function finv!(F, x, k::Int, l::Int, u1::Complex, u2::Complex)
+function finv!(F, x, k::Int, l::Int, u1, u2)
     θ = x[1]
     ϕ = x[2]
     F[1] =  real(u1) * cos(ϕ) * cos(θ) + imag(u1) * sin(ϕ) * cos(θ) - real(u2) * sin(θ)
@@ -106,7 +106,7 @@ function finv!(F, x, k::Int, l::Int, u1::Complex, u2::Complex)
 end
 
 # The Jacobian for the system of equations described by F[1], F[2] in finv! as a function of θ, ϕ
-function jinv!(J, x, k::Int, l::Int, u1::Complex, u2::Complex)
+function jinv!(J, x, k::Int, l::Int, u1, u2)
     θ = x[1]
     ϕ = x[2]
     J[1, 1] = -real(u1) * cos(ϕ) * sin(θ) - imag(u1) * sin(ϕ) * sin(θ) - real(u2) * cos(θ)
@@ -124,7 +124,7 @@ a diagonal matrix `D` describing some combination of single mode phase shifts an
 specificying elementary beam splitter operations `(m, n=m+1, θ, ϕ)` (see ref) such that one may construct
 `U = D × .. × Tₘₙ(θ, ϕ).
 """
-function clements_decomposition(U::Array{<:Complex}; p0=[0, π])
+function clements_decomposition(U; p0=[0, π])
     N, M = size(U)
     right_multipliers = []
     left_multipliers = []

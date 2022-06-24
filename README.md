@@ -45,5 +45,10 @@ Plot the beam splitter geometry for a Clements decomposition of an arbitrary N×
 ```
 
 # heralded_w_state.ipynb
+`noiserun(σreflection::Real, σphase::Real)` does the following:
 
+1) Add noise to the ideal beam splitter parameters and compute the resulting noisy unitary where `σreflection` is the standard deviation of the Gaussian noise aded on top of the reflection coefficient parameter and `σphase` is the standard deviation of the noise injected independently for each beam splitter.
+2) Compute the click patterns corresponding to each W/M state in the noisy case.
+3) Iterate through all noiseless W/M click patterns (computed previously) and then, for each choice, iterate through all noisy click patterns. If there’s a match and the noiseless/noisy click patterns both result from the same input state, we call this a true positive. Otherwise, we call this a false positive. We sum the probabilities for all true positive cases (same for false positives).
 
+The following for loops, executes this procedure many times in parallel for different noise realizations and averages the results. The following plots illustrate these averages as a function of the noise strength parameters.
